@@ -57,9 +57,12 @@ WatchFaceTest::WatchFaceTest(Controllers::DateTime& dateTimeController,
   lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_CENTER, 0, 60);
   lv_obj_set_style_local_text_color(label_date, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x990099));
 
+  label_bg = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(label_bg, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_extrabold_compressed);
+  lv_obj_align(label_bg, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 0, 22);
+
   label_time = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(label_time, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_extrabold_compressed);
-
   lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
 
   label_time_ampm = lv_label_create(lv_scr_act(), nullptr);
@@ -103,6 +106,10 @@ void WatchFaceTest::Refresh() {
     lv_label_set_text_static(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
   }
 
+  // TODO: Move elsewhere
+  lv_label_set_text_fmt(label_bg, "%3d", 123);
+  lv_obj_align(label_bg, lv_scr_act(), LV_ALIGN_IN_TOP_MID, 0, 22);
+
   currentDateTime = std::chrono::time_point_cast<std::chrono::minutes>(dateTimeController.CurrentDateTime());
 
   if (currentDateTime.IsUpdated()) {
@@ -122,6 +129,7 @@ void WatchFaceTest::Refresh() {
       lv_label_set_text(label_time_ampm, ampmChar);
       lv_label_set_text_fmt(label_time, "%2d:%02d", hour, minute);
       lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
+
     } else {
       lv_label_set_text_fmt(label_time, "%02d:%02d", hour, minute);
       lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
